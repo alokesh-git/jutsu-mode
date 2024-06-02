@@ -1,0 +1,335 @@
+{
+	"name": "jutsu-power",
+	"displayName": "jutsu-power",
+	"description": "that enable jutsu in you texteditor",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.22.0"
+	},
+	"categories": [
+		"Themes",
+		"Other"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./out/extension.js",
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/mocha": "2.2.32",
+		"@types/node": "17.0.21",
+		"mocha": "2.3.3",
+		"typescript": "4.5.5",
+		"vsce": "1.103.1",
+		"vscode": "1.1.37"
+	},
+	"contributes": {
+		"commands": [
+			{
+				"command": "jutsu-power.enablejutsupower",
+				"title": "Enable jutsu power",
+				"when": "!config.jutsu-power.enabled",
+				"enablement": "!config.jutsu-power.enabled"
+			},
+			{
+				"command": "jutsu-power.disablejutsupower",
+				"title": "Disable jutsu power",
+				"when": "config.jutsu-power.enabled",
+				"enablement": "config.jutsu-power.enabled"
+			}
+		],
+		"configuration": [
+			{
+				"title": "General",
+				"order": 0,
+				"properties": {
+					"jutsu-power.enabled": {
+						"order": 0,
+						"default": false,
+						"type": "boolean",
+						"description": "Enable to activate jutsu power!!!"
+					},
+					"jutsu-power.presets": {
+						"order": 1,
+						"type": "string",
+						"enum": [
+							"particles",
+							"fireworks",
+							"flames",
+							"tieJutsu",
+							"flashJutsu",
+							"kakasiJutsu",
+							"kamabuntai",
+							"magic",
+							"clippy",
+							"simple-rift",
+							"exploding-rift"
+						],
+						"default": "particles",
+						"description": "Choose between different preset gifs to use when jutsupower is activated"
+					}
+				}
+			},
+			{
+				"title": "Combo",
+				"order": 1,
+				"properties": {
+					"jutsu-power.combo.location": {
+						"order": 0,
+						"type": "string",
+						"default": "off",
+						"enum": [
+							"editor",
+							"statusbar",
+							"default",
+							"off"
+						],
+						"enumDescriptions": [
+							"Show the combo in the editor. The true 'jutsu power' experience",
+							"Use the status bar. A more subdued experience.",
+							"Use the default value. May be overiddent by other settings.",
+							"Turn off the combo entirely."
+						],
+						"description": "Control where all the combo information is visible."
+					},
+					"jutsu-power.combo.threshold": {
+						"default": 0,
+						"type": "number",
+						"description": "The combo number needed to activate jutsu power!!! and start shaking and exploding the screen! If the value is 0, jutsu power will always be active."
+					},
+					"jutsu-power.combo.timeout": {
+						"default": 10,
+						"type": "number",
+						"description": "The number of seconds before the combo resets. If the value is 0, the timer will never reset."
+					},
+					"jutsu-power.combo.counterEnabled": {
+						"type": "string",
+						"default": "default",
+						"enum": [
+							"show",
+							"hide",
+							"default"
+						],
+						"enumDescriptions": [
+							"Show the combo counter",
+							"Hide the combo counter",
+							"Use the default value. May be overridden by other settings."
+						],
+						"description": "Control whether the combo counter is visible."
+					},
+					"jutsu-power.combo.counterSize": {
+						"type": "number",
+						"default": 3,
+						"minimum": 0,
+						"description": "Control the size of the Combo Meter text"
+					},
+					"jutsu-power.combo.timerEnabled": {
+						"type": "string",
+						"default": "default",
+						"enum": [
+							"show",
+							"hide",
+							"default"
+						],
+						"enumDescriptions": [
+							"Show the combo timer",
+							"Hide the combo timer",
+							"Use the default value. May be overridden by other settings."
+						],
+						"description": "Control whether the combo timer is visible."
+					}
+				}
+			},
+			{
+				"title": "Shake",
+				"order": 2,
+				"properties": {
+					"jutsu-power.shake.enabled": {
+						"order": 0,
+						"type": "boolean",
+						"default": true,
+						"description": "Set to false to disable shaking while typing"
+					},
+					"jutsu-power.shake.intensity": {
+						"type": "number",
+						"default": 3,
+						"description": "The intensity with which the screen shakes"
+					}
+				}
+			},
+			{
+				"title": "Explosions",
+				"order": 3,
+				"properties": {
+					"jutsu-power.explosions.enabled": {
+						"order": 0,
+						"type": "boolean",
+						"default": true,
+						"description": "Set to false to disable explosions while typing"
+					},
+					"jutsu-power.explosions.maxExplosions": {
+						"type": "number",
+						"default": 1,
+						"description": "The maximum number of simultaneous explosions"
+					},
+					"jutsu-power.explosions.size": {
+						"type": "number",
+						"default": 6,
+						"description": "The size of the explosions. For value X, the height is set to X rem and the width to X ch"
+					},
+					"jutsu-power.explosions.frequency": {
+						"type": "number",
+						"default": 2,
+						"description": "The number of key strokes needed to trigger an explosion. 2 means every second keystroke will explode, 1 means every key stroke."
+					},
+					"jutsu-power.explosions.offset": {
+						"type": "number",
+						"default": 0.35,
+						"description": "The vertical offset of the explosions. Increasing it will move the explosions up, decreasing it will move them down."
+					},
+					"jutsu-power.explosions.customExplosions": {
+						"order": 16,
+						"type": "array",
+						"items": "string",
+						"default": [],
+						"markdownDescription": "This value will go into the 'url()' part of a background image. It should be a base64 encoded gif or **https** URL _without_ quotes."
+					},
+					"jutsu-power.explosions.backgroundMode": {
+						"type": "string",
+						"default": "mask",
+						"enum": [
+							"mask",
+							"image"
+						],
+						"enumDescriptions": [
+							"Uses the gifs as a mask to let the background color come through (similar to atom jutsu power)",
+							"Display the actual gif."
+						],
+						"description": "Affects the css properties used to display the gif."
+					},
+					"jutsu-power.explosions.gifMode": {
+						"type": "string",
+						"default": "continue",
+						"enum": [
+							"continue",
+							"restart"
+						],
+						"enumDescriptions": [
+							"Resume playing it from its previous point",
+							"Restart the gif each time it is shown. This is useful when you have multiple visible gifs, but may reduce performance"
+						],
+						"description": "Control the 'playback' mode of the gifs."
+					},
+					"jutsu-power.explosions.explosionOrder": {
+						"description": "Determines how the explosions are cycled. 'random' (default) picks from the list randomly. 'sequential' goes through the list in order, and a number will select the explosion at that (zero based)index in the list",
+						"oneOf": [
+							{
+								"type": "string",
+								"enum": [
+									"random",
+									"sequential"
+								]
+							},
+							{
+								"type": "number"
+							}
+						],
+						"default": "random"
+					},
+					"jutsu-power.explosions.duration": {
+						"description": "Determines how long an explosion lasts (in milliseconds). Set to 0 for it to last forever.",
+						"type": "number",
+						"default": 1000
+					},
+					"jutsu-power.explosions.customCss": {
+						"description": "Set custom CSS that will apply to the explosion element.",
+						"type": "object",
+						"default": {}
+					}
+				}
+			},
+			{
+				"title": "Deprecated",
+				"properties": {
+					"jutsu-power.comboThreshold": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.combo.threshold` instead."
+					},
+					"jutsu-power.comboTimeout": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.combo.timeout` instead."
+					},
+					"jutsu-power.enableComboCounter": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.combo.counterEnabled` instead."
+					},
+					"jutsu-power.enableComboTimer": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.combo.timerEnabled` instead."
+					},
+					"jutsu-power.enableStatusBarComboCounter": {
+						"default": null,
+						"description": "Set to false to disable showing the combo in the statusbar",
+						"markdownDeprecationMessage": "Use `jutsu-power.combo.location` and `jutsu-power.combo.counterEnabled` instead. This will be removed in a future version."
+					},
+					"jutsu-power.enableStatusBarComboTimer": {
+						"default": null,
+						"description": "Set to false to disable showing the timer in the statusbar",
+						"markdownDeprecationMessage": "Use `jutsu-power.combo.location` and `jutsu-power.combo.timerEnabled` instead. This will be removed in a future version."
+					},
+					"jutsu-power.enableShake": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.shake.enabled` instead."
+					},
+					"jutsu-power.shakeIntensity": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.shake.intensity` instead."
+					},
+					"jutsu-power.explosionSize": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.size` instead."
+					},
+					"jutsu-power.explosionFrequency": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.frequency` instead."
+					},
+					"jutsu-power.explosionOffset": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.offset` instead."
+					},
+					"jutsu-power.customExplosions": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.customExplosions` instead."
+					},
+					"jutsu-power.backgroundMode": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.backgroundMode` instead."
+					},
+					"jutsu-power.gifMode": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.gifMode` instead."
+					},
+					"jutsu-power.explosionOrder": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.explosionOrder` instead."
+					},
+					"jutsu-power.explosionDuration": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.duration` instead."
+					},
+					"jutsu-power.customCss": {
+						"default": null,
+						"markdownDeprecationMessage": "Deprecated. Use `jutsu-power.explosions.customCss` instead."
+					}
+				}
+			}
+		]
+	}
+}
